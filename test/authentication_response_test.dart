@@ -10,7 +10,7 @@ void main() {
       map.authorization = null;
 
       expect(map.authorization, null);
-      expect(map, {});
+      expect(map, <String, Object>{});
 
       map['Authorization'] = 'Amazing';
       expect(map.authorization, 'Amazing');

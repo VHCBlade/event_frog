@@ -5,7 +5,7 @@ import 'package:event_authentication/event_authentication.dart';
 import 'package:event_frog/event_frog.dart';
 
 /// Helps authenticate jwts and create them from logins
-class AuthenticationResponseBuilder {
+class AuthenticatedResponseBuilder {
   /// Performs an emailLogin for an [EmailLoginRequest] that is
   /// in the request inside [context]
   ///

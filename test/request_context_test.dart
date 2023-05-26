@@ -1,6 +1,7 @@
 import 'package:dart_frog/dart_frog.dart';
 import 'package:event_authentication/event_authentication.dart';
 import 'package:event_bloc_tester/event_bloc_tester.dart';
+import 'package:event_db/event_db.dart';
 import 'package:event_frog/event_frog.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -12,6 +13,8 @@ class _MockRequestContext extends Mock implements RequestContext {
   final _request = {
     ResponseErrorBuilder: ResponseErrorBuilder(),
     EventEnvironment: const EventEnvironment(),
+    DatabaseRepository:
+        FakeDatabaseRepository(constructors: {UserModel: UserModel.new}),
   };
   @override
   T read<T>() => _request[T] as T;

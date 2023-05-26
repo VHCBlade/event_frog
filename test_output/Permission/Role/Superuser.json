@@ -1,0 +1,20 @@
+[
+  "[\"superuser\"]",
+  "\"Allowed\"",
+  "\"Allowed\"",
+  "[\"regular\"]",
+  "\"Failed\"",
+  "\"Not Found\"",
+  "[\"superuser\",\"regular\"]",
+  "\"Allowed\"",
+  "\"Allowed\"",
+  "[\"amazing\"]",
+  "\"Failed\"",
+  "\"Not Found\"",
+  "[\"absolute\"]",
+  "\"Failed\"",
+  "\"Not Found\"",
+  "[]",
+  "\"Failed\"",
+  "\"Not Found\""
+]

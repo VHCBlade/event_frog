@@ -1,8 +1,17 @@
 import 'package:dart_frog/dart_frog.dart';
 import 'package:event_authentication/event_authentication.dart';
 import 'package:event_db/event_db.dart';
+import 'package:event_frog/event_frog.dart';
 
 import 'test_models.dart';
+
+Map<String, JWTRole Function()> get roleTestCases => {
+      'Superuser': () => JWTRole()..roles = [superuserRole],
+      'Empty': () => JWTRole()..roles = [],
+      'Regular': () => JWTRole()..roles = ['regular'],
+      'Superuser and Reqular': () =>
+          JWTRole()..roles = ['regular', superuserRole],
+    };
 
 Map<String, Request Function()> get requestTestCases => {
       'Example Model': () => Request.post(
