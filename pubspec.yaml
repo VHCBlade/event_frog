@@ -1,7 +1,7 @@
 name: event_frog
-description: A starting point for Dart libraries or applications.
+description: A framework for making dart_frog web servers using event_db
 version: 0.1.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/VHCBlade/event_frog
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
