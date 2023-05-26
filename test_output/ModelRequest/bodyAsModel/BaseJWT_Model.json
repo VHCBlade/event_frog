@@ -1,0 +1,6 @@
+[
+  "\"Invalid!\"",
+  "{\"type\":\"BaseJWT\",\"dateIssued\":1325347200000000,\"role\":{\"type\":\"JWTRole\",\"roles\":[\"Great\",\"Cool\"],\"id\":null},\"expiry\":1728000000,\"id\":null}",
+  "\"Invalid!\"",
+  "\"Invalid!\""
+]
