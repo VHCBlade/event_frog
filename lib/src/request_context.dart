@@ -1,5 +1,4 @@
 import 'package:dart_frog/dart_frog.dart';
-import 'package:event_authentication/event_authentication.dart';
 import 'package:event_authentication/event_authenticator_db.dart';
 import 'package:event_db/event_db.dart';
 import 'package:event_frog/event_frog.dart';

@@ -13,6 +13,25 @@ Map<String, JWTRole Function()> get roleTestCases => {
           JWTRole()..roles = ['regular', superuserRole],
     };
 
+Map<String, EmailLoginRequest? Function()> get emailLoginRequestTestCases => {
+      'Null': () => null,
+      'Full Request': () => EmailLoginRequest()
+        ..email = 'full@example.com'
+        ..password = 'password',
+      'No Expiry Request': () => EmailLoginRequest()
+        ..email = 'full@example.com'
+        ..password = 'password'
+        ..noExpiry = true,
+      'Failed Password Request': () => EmailLoginRequest()
+        ..email = 'full@example.com'
+        ..password = 'failed'
+        ..noExpiry = true,
+      'Failed Email Request': () => EmailLoginRequest()
+        ..email = 'lost@example.com'
+        ..password = 'password'
+        ..noExpiry = true,
+    };
+
 Map<String, Request Function()> get requestTestCases => {
       'Example Model': () => Request.post(
             Uri.parse('https://example.com/a'),

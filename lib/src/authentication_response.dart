@@ -55,8 +55,8 @@ class AuthenticatedResponseBuilder {
   Future<Response> createSafeResponse(
     RequestContext context,
     FutureOr<Response> Function(RequestContext, BaseJWT) builder, {
-    FutureOr<Response> Function(RequestContext)? defaultResponse,
     required PermissionChecker permissionChecker,
+    FutureOr<Response> Function(RequestContext)? defaultResponse,
   }) async {
     return Response();
   }

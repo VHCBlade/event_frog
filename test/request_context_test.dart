@@ -1,5 +1,7 @@
+import 'dart:math';
+
 import 'package:dart_frog/dart_frog.dart';
-import 'package:event_authentication/event_authentication.dart';
+import 'package:event_authentication/event_authenticator_db.dart';
 import 'package:event_bloc_tester/event_bloc_tester.dart';
 import 'package:event_db/event_db.dart';
 import 'package:event_frog/event_frog.dart';
@@ -13,8 +15,14 @@ class _MockRequestContext extends Mock implements RequestContext {
   final _request = {
     ResponseErrorBuilder: ResponseErrorBuilder(),
     EventEnvironment: const EventEnvironment(),
-    DatabaseRepository:
-        FakeDatabaseRepository(constructors: {UserModel: UserModel.new}),
+    DatabaseRepository: FakeDatabaseRepository(
+      constructors: {
+        UserModel: UserModel.new,
+        UserAuthentication: UserAuthentication.new,
+      },
+    ),
+    AuthenticationSecretsRepository:
+        FileSecretsRepository(secretsFile: 'test.txt', random: Random(120)),
   };
   @override
   T read<T>() => _request[T] as T;
@@ -48,6 +56,18 @@ void main() {
     test('userDatabase', () async {
       final context = _MockRequestContext();
       expect(context.userDatabase.databaseName, 'Users');
+    });
+    test('databaseUserAuthenticator', () async {
+      final context = _MockRequestContext();
+      final authenticator = await context.databaseUserAuthenticator;
+      final model = UserModel()..idSuffix = '1';
+      await authenticator.saveUserAuthentication(model, 'cool');
+      final authentication = await authenticator.findUserAuthentication(model);
+      expect(
+        authentication!.password,
+        'f7a286c7ff840259918ef65daa44ff6817dad7e0eb83c1950bead9a37a1a0cbc',
+      );
+      await context.read<AuthenticationSecretsRepository>().clearSecrets();
     });
   });
 }

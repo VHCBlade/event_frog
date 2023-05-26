@@ -9,3 +9,5 @@ pubspec.lock
 coverage/
 
 build/
+
+test.txt
