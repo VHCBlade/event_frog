@@ -54,8 +54,11 @@ void roleTest() {
           tester.addTestValue('Failed');
         }
         try {
-          await checker.assertPermission(_MockRequestContext(), jwt,
-              hideError: true);
+          await checker.assertPermission(
+            _MockRequestContext(),
+            jwt,
+            hideError: true,
+          );
           tester.addTestValue('Allowed');
         } on NotFoundException {
           tester.addTestValue('Not Found');

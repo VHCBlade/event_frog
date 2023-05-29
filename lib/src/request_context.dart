@@ -8,6 +8,10 @@ extension ResponseBuilderContext on RequestContext {
   /// Returns the closest [ResponseErrorBuilder]
   ResponseErrorBuilder get responseBuilder => read<ResponseErrorBuilder>();
 
+  /// Returns the closest [AuthenticatedResponseBuilder]
+  AuthenticatedResponseBuilder get authenticatedResponseBuilder =>
+      read<AuthenticatedResponseBuilder>();
+
   /// Convenience function to check if the current server is made for a dev
   /// environment or a production environment.
   bool get isDevelopmentMode =>

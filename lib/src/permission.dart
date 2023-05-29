@@ -57,3 +57,19 @@ class RolePermissionChecker extends PermissionChecker {
     return baseJWT.jwtRole.containsAnyRoles([...allowedRoles, superuserRole]);
   }
 }
+
+/// A [PermissionChecker] that ensures that all roles in a list are present in a
+/// provied [BaseJWT]
+class AllRoleChecker extends PermissionChecker {
+  /// [allRoles] represents all of the roles that are needed for
+  /// [checkPermission].
+  AllRoleChecker(this.allRoles);
+
+  /// All of the roles that need to be present in the JWT to allow permission
+  final Set<String> allRoles;
+
+  @override
+  bool checkPermission(RequestContext context, BaseJWT baseJWT) {
+    return allRoles.containsAll(baseJWT.jwtRole.roles);
+  }
+}

@@ -79,7 +79,10 @@ class AuthenticatedResponseBuilder {
     if (renewedJWT.dateIssued
         .add(renewedJWT.expiry)
         .isAfter(jwt.dateIssued.add(jwt.expiry))) {
-      response.headers.authorization = await signer.createToken(renewedJWT);
+      response.copyWith(
+        headers: <String, String>{...response.headers}..authorization =
+            await signer.createToken(renewedJWT),
+      );
     }
 
     return response;
@@ -94,7 +97,7 @@ class AuthenticatedResponseBuilder {
       throw PermissionException();
     }
 
-    final checker = RolePermissionChecker(user.roles.roles);
+    final checker = AllRoleChecker(user.roles.roles.toSet());
     await checker.assertPermission(context, jwt);
   }
 }

@@ -23,6 +23,7 @@ class _MockRequestContext extends Mock implements RequestContext {
     ),
     AuthenticationSecretsRepository:
         FileSecretsRepository(secretsFile: 'test.txt', random: Random(120)),
+    BaseJWT: BaseJWT()..dateIssued = DateTime(2010)
   };
   @override
   T read<T>() => _request[T] as T;
@@ -56,6 +57,10 @@ void main() {
     test('userDatabase', () async {
       final context = _MockRequestContext();
       expect(context.userDatabase.databaseName, 'Users');
+    });
+    test('BaseJWT', () async {
+      final context = _MockRequestContext();
+      expect(context.jwt.dateIssued, DateTime(2010));
     });
     test('databaseUserAuthenticator', () async {
       final context = _MockRequestContext();
