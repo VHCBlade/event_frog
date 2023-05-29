@@ -34,6 +34,7 @@ class RequestRequestContextDecorator implements RequestContext {
 void main() {
   group('AuthenticatedResponseBuilder', () {
     test('createAuthenticatedResponse', createAuthenticatedResponseTest);
+    test('refreshedAuthentication', refreshedAuthenticationTest);
   });
 }
 
@@ -65,18 +66,14 @@ final providerStack = EventFrogMiddlewareStack(
   ],
 );
 
-Future<void> createAuthenticatedResponseTest() async {
-  final saved = UserModel()
-    ..roles = (JWTRole()..roles = ['amazing'])
-    ..idSuffix = 'saved';
-  final unsaved = UserModel()
-    ..idSuffix = 'unsaved'
-    ..roles = (JWTRole()..roles = ['amazing']);
-  final handler = providerStack.use((context) async {
+Handler _createHandler(
+  UserModel saved, [
+  Duration duration = const Duration(hours: 2),
+]) {
+  return providerStack.use((context) async {
+    await Future<void>.delayed(const Duration(milliseconds: 20));
     await context.userDatabase.saveModel(
-      UserModel()
-        ..roles = (JWTRole()..roles = ['amazing'])
-        ..idSuffix = 'saved',
+      saved,
     );
     final model = context.read<UserModel>();
     if (model.id != null) {
@@ -86,7 +83,7 @@ Future<void> createAuthenticatedResponseTest() async {
             ...context.request.headers,
           }..authorization = await context
               .read<JWTSigner>()
-              .createToken(BaseJWT.fromUserModel(model)),
+              .createToken(BaseJWT.fromUserModel(model)..expiry = duration),
         ),
         context,
       );
@@ -101,6 +98,69 @@ Future<void> createAuthenticatedResponseTest() async {
       ),
     );
   });
+}
+
+Future<void> refreshedAuthenticationTest() async {
+  final saved = UserModel()
+    ..roles = (JWTRole()..roles = ['amazing'])
+    ..idSuffix = 'saved';
+  final handler = _createHandler(saved);
+
+  final token = (await handler.use(provider<UserModel>((_) => saved))(
+    _MockRequestContext(),
+  ))
+      .headers
+      .authorization;
+  final jwt = BaseJWT.fromToken(token!);
+
+  final token2 = (await handler.use(provider<UserModel>((_) => saved))(
+    _MockRequestContext(),
+  ))
+      .headers
+      .authorization;
+  final jwt2 = BaseJWT.fromToken(token2!);
+
+  final token3 = (await _createHandler(saved, const Duration(days: 100000))
+          .use(provider<UserModel>((_) => saved))(
+    _MockRequestContext(),
+  ))
+      .headers
+      .authorization;
+  final jwt3 = BaseJWT.fromToken(token3!);
+
+  expect(
+    jwt.dateIssued,
+    (DateTime issued) => issued != jwt2.dateIssued,
+  );
+
+  expect(
+    jwt3.dateIssued,
+    (DateTime issued) => issued != jwt2.dateIssued,
+  );
+
+  expect(
+    jwt3.dateIssued,
+    (DateTime issued) => issued != jwt.dateIssued,
+  );
+
+  expect(
+    (await handler.use(provider<UserModel>((_) => UserModel()))(
+      _MockRequestContext(),
+    ))
+        .headers
+        .authorization,
+    null,
+  );
+}
+
+Future<void> createAuthenticatedResponseTest() async {
+  final saved = UserModel()
+    ..roles = (JWTRole()..roles = ['amazing'])
+    ..idSuffix = 'saved';
+  final unsaved = UserModel()
+    ..idSuffix = 'unsaved'
+    ..roles = (JWTRole()..roles = ['amazing']);
+  final handler = _createHandler(saved);
 
   expect(
     await (await handler.use(provider<UserModel>((_) => UserModel()))(

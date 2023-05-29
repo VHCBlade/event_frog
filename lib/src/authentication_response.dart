@@ -71,6 +71,9 @@ class AuthenticatedResponseBuilder {
     await validateRoles(context, jwt);
 
     final response = await builder(context.provide<BaseJWT>(() => jwt));
+    if (response.statusCode != 200) {
+      return response;
+    }
     final renewedJWT = BaseJWT()
       ..copy(jwt)
       ..dateIssued = DateTime.now()
@@ -79,13 +82,16 @@ class AuthenticatedResponseBuilder {
     if (renewedJWT.dateIssued
         .add(renewedJWT.expiry)
         .isAfter(jwt.dateIssued.add(jwt.expiry))) {
-      response.copyWith(
+      return response.copyWith(
         headers: <String, String>{...response.headers}..authorization =
             await signer.createToken(renewedJWT),
       );
     }
 
-    return response;
+    return response.copyWith(
+      headers: <String, String>{...response.headers}..authorization =
+          authorization,
+    );
   }
 
   /// Checks the User database in [context] to make sure that the user reference
