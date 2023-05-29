@@ -46,7 +46,7 @@ void roleTest() {
         final jwt = BaseJWT()..jwtRole = (JWTRole()..roles = roles);
         tester.addTestValue(roles);
         try {
-          checker.assertPermission(_MockRequestContext(), jwt);
+          await checker.assertPermission(_MockRequestContext(), jwt);
           tester.addTestValue('Allowed');
         } on NotFoundException {
           tester.addTestValue('Not Found');
@@ -54,7 +54,8 @@ void roleTest() {
           tester.addTestValue('Failed');
         }
         try {
-          checker.assertPermission(_MockRequestContext(), jwt, hideError: true);
+          await checker.assertPermission(_MockRequestContext(), jwt,
+              hideError: true);
           tester.addTestValue('Allowed');
         } on NotFoundException {
           tester.addTestValue('Not Found');

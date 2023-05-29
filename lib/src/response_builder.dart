@@ -16,8 +16,8 @@ class ResponseErrorBuilder {
   ///
   /// You can add to this map to add more exception to response handling.
   final Map<Type, ResponseBuilder<dynamic>> map = {
-    JWTExpiredException: (context, _) => invalidJWTResponse(),
-    JWTInvalidException: (context, _) => invalidJWTResponse(),
+    EventJWTExpiredException: (context, _) => invalidJWTResponse(),
+    EventJWTInvalidException: (context, _) => invalidJWTResponse(),
     PermissionException: (context, _) => permissionResponse(),
     NotFoundException: (context, _) => notFoundResponse(),
     FormatException: (context, _) => syntaxErrorResponse(),
@@ -39,9 +39,9 @@ class ResponseErrorBuilder {
     RequestContext context,
     FutureOr<Response> Function(RequestContext) builder, {
     FutureOr<Response> Function(RequestContext)? defaultResponse,
-  }) {
+  }) async {
     try {
-      return builder(context);
+      return await builder(context);
     } on Object catch (e) {
       if (map.containsKey(e.runtimeType)) {
         return map[e.runtimeType]!(context, e);

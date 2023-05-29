@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dart_frog/dart_frog.dart';
 import 'package:event_authentication/event_authentication.dart';
 import 'package:event_frog/event_frog.dart';
@@ -11,19 +13,19 @@ class NotFoundException implements EventFrogException {}
 /// This allows you to perform permission checks on user's JWTs
 abstract class PermissionChecker {
   /// Checks if the given [baseJWT] is allowed.
-  bool checkPermission(RequestContext context, BaseJWT baseJWT);
+  FutureOr<bool> checkPermission(RequestContext context, BaseJWT baseJWT);
 
   /// Throws an error if a [checkPermission] call with [context] and [baseJWT]
   /// would return false.
   ///
   /// If [hideError] is true, a [NotFoundException] will be thrown instead of a
   /// [PermissionException]
-  void assertPermission(
+  FutureOr<void> assertPermission(
     RequestContext context,
     BaseJWT baseJWT, {
     bool hideError = false,
-  }) {
-    if (!checkPermission(context, baseJWT)) {
+  }) async {
+    if (!await checkPermission(context, baseJWT)) {
       throw hideError ? NotFoundException() : PermissionException();
     }
   }

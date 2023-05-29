@@ -87,7 +87,7 @@ void main() {
       expect(
         await (await ResponseErrorBuilder().createSafeResponse(
           _MockRequestContext(),
-          (p0) => throw JWTExpiredException(),
+          (p0) => throw EventJWTExpiredException(),
         ))
             .body(),
         await invalidJWTResponse().body(),
@@ -95,7 +95,7 @@ void main() {
       expect(
         await (await ResponseErrorBuilder().createSafeResponse(
           _MockRequestContext(),
-          (p0) => throw JWTInvalidException('Invalid!'),
+          (p0) => throw EventJWTInvalidException('Invalid!'),
           defaultResponse: loginFailResponse,
         ))
             .body(),

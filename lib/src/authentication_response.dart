@@ -52,13 +52,50 @@ class AuthenticatedResponseBuilder {
     );
   }
 
-  Future<Response> createSafeResponse(
+  /// Pulls the [BaseJWT] from the [context]'s headers and authenticates it.
+  ///
+  /// This will also update the Authorization token on 200 status code response
+  /// to have a more up to date token.
+  Future<Response> createAuthenticatedResponse(
     RequestContext context,
-    FutureOr<Response> Function(RequestContext, BaseJWT) builder, {
-    required PermissionChecker permissionChecker,
+    FutureOr<Response> Function(RequestContext) builder, {
     FutureOr<Response> Function(RequestContext)? defaultResponse,
   }) async {
-    return Response();
+    final authorization = context.request.headers.authorization;
+    if (authorization == null) {
+      throw PermissionException();
+    }
+    final signer = context.read<JWTSigner>();
+    final jwt = await signer.validateAndDecodeToken(authorization);
+
+    await validateRoles(context, jwt);
+
+    final response = await builder(context.provide<BaseJWT>(() => jwt));
+    final renewedJWT = BaseJWT()
+      ..copy(jwt)
+      ..dateIssued = DateTime.now()
+      ..expiry = context.environment.sessionLength;
+
+    if (renewedJWT.dateIssued
+        .add(renewedJWT.expiry)
+        .isAfter(jwt.dateIssued.add(jwt.expiry))) {
+      response.headers.authorization = await signer.createToken(renewedJWT);
+    }
+
+    return response;
+  }
+
+  /// Checks the User database in [context] to make sure that the user reference
+  /// in [jwt] is still valid.
+  Future<void> validateRoles(RequestContext context, BaseJWT jwt) async {
+    final database = context.userDatabase;
+    final user = await database.findModel<UserModel>(jwt.id!);
+    if (user == null) {
+      throw PermissionException();
+    }
+
+    final checker = RolePermissionChecker(user.roles.roles);
+    await checker.assertPermission(context, jwt);
   }
 }
 
