@@ -40,4 +40,22 @@ class EventMiddleware {
   static Middleware get authenticatedResponse =>
       (handler) => (context) => context.authenticatedResponseBuilder
           .createAuthenticatedResponse(context, handler);
+
+  /// Adds the [checker] to make sure that the [BaseJWT] in the [RequestContext]
+  /// passes the [checker]. If it doesn't, the appropriate error will be thrown.
+  ///
+  /// While not strictly necessary, it would be better if a [safeResponse] and
+  /// an [authenticatedResponse] appear before this.
+  static Middleware permissionLevel(
+    PermissionChecker checker, {
+    bool hideError = true,
+  }) =>
+      (handler) => (context) async {
+            await checker.assertPermission(
+              context,
+              context.jwt,
+              hideError: hideError,
+            );
+            return handler(context);
+          };
 }
