@@ -83,6 +83,23 @@ void main() {
         await loginFailResponse().body(),
       );
     });
+    test('Unexpected Response', () async {
+      var i = 0;
+      expect(
+        await (await ResponseErrorBuilder(
+          logger: (e) {
+            expect(e, isArgumentError);
+            i++;
+          },
+        ).createSafeResponse(
+          _MockRequestContext(),
+          (p0) => throw ArgumentError(),
+        ))
+            .body(),
+        await unexpectedErrorResponse().body(),
+      );
+      expect(i, 1);
+    });
     test('JWT Exception', () async {
       expect(
         await (await ResponseErrorBuilder().createSafeResponse(

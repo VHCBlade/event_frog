@@ -12,6 +12,9 @@ typedef ResponseBuilder<T> = FutureOr<Response> Function(RequestContext, T);
 
 /// Automatically maps thrown exceptions/errors to responses to reduce boilerplate.
 class ResponseErrorBuilder {
+  /// [logger] can be passed to have some logging for unexpected errors.
+  ResponseErrorBuilder({this.logger});
+
   /// This is used when something is thrown while running [createSafeResponse]
   ///
   /// You can add to this map to add more exception to response handling.
@@ -23,6 +26,9 @@ class ResponseErrorBuilder {
     FormatException: (context, _) => syntaxErrorResponse(),
     TypeError: (context, _) => syntaxErrorResponse(),
   };
+
+  /// Called when an unexpected error occurs.
+  final void Function(Object)? logger;
 
   /// Allows the [builder] to create a response. If anything is thrown by
   /// builder, it will automatically catch it and create a new response.
@@ -55,6 +61,7 @@ class ResponseErrorBuilder {
       if (defaultResponse != null) {
         return defaultResponse(context);
       }
+      logger?.call(e);
       return unexpectedErrorResponse();
     }
   }
