@@ -138,5 +138,50 @@ void main() {
         await notFoundResponse().body(),
       );
     });
+    test('Logger', () async {
+      var i = 0;
+      await ResponseErrorBuilder(
+        logger: (event) {
+          expect(event, isArgumentError);
+          i++;
+        },
+        logAllErrors: false,
+      ).createSafeResponse(
+        _MockRequestContext(),
+        (p0) => throw ArgumentError(),
+      );
+      await ResponseErrorBuilder(
+        logger: (event) {
+          expect(event, isArgumentError);
+          i++;
+        },
+        logAllErrors: true,
+      ).createSafeResponse(
+        _MockRequestContext(),
+        (p0) => throw ArgumentError(),
+      );
+      expect(i, 2);
+      await ResponseErrorBuilder(
+        logger: (event) {
+          expect(event, isA<PermissionException>());
+          i++;
+        },
+        logAllErrors: false,
+      ).createSafeResponse(
+        _MockRequestContext(),
+        (p0) => throw PermissionException(),
+      );
+      await ResponseErrorBuilder(
+        logger: (event) {
+          expect(event, isA<PermissionException>());
+          i++;
+        },
+        logAllErrors: true,
+      ).createSafeResponse(
+        _MockRequestContext(),
+        (p0) => throw PermissionException(),
+      );
+      expect(i, 3);
+    });
   });
 }

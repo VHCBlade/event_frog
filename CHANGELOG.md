@@ -1,6 +1,10 @@
+## 0.1.3
+
+- Added optional logAllErrors for ResponseErrorBuilder to enable logging of all thrown errors
+
 ## 0.1.2
 
-- Added optional logger for ResponseBuilder to enable logging for unexpected errors
+- Added optional logger for ResponseErrorBuilder to enable logging for unexpected errors
 
 ## 0.1.1
 
