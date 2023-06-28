@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:event_authentication/event_authentication.dart';
+import 'package:event_db/event_db.dart';
 import 'package:event_frog/event_frog.dart';
 
 /// These are implemented by exceptions that are specifically used by event_frog
@@ -22,6 +23,12 @@ class ResponseErrorBuilder {
   ///
   /// You can add to this map to add more exception to response handling.
   final Map<Type, ResponseBuilder<dynamic>> map = {
+    ValidationException: (context, exception) =>
+        validationExceptionResponse(exception as ValidationException),
+    ValidationCollectionException: (context, exception) =>
+        validationCollectionExceptionResponse(
+          exception as ValidationCollectionException,
+        ),
     EventJWTExpiredException: (context, _) => invalidJWTResponse(),
     EventJWTInvalidException: (context, _) => invalidJWTResponse(),
     PermissionException: (context, _) => permissionResponse(),

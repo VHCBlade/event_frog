@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:event_authentication/event_authentication.dart';
+import 'package:event_db/event_db.dart';
 import 'package:event_frog/event_frog.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -182,6 +183,39 @@ void main() {
         (p0) => throw PermissionException(),
       );
       expect(i, 3);
+    });
+    test('Validation Exception', () async {
+      expect(
+        await (await ResponseErrorBuilder().createSafeResponse(
+          _MockRequestContext(),
+          (p0) => throw const ValidationException('cool', 'Amazing'),
+        ))
+            .body(),
+        await validationExceptionResponse(
+          const ValidationException('cool', 'Amazing'),
+        ).body(),
+      );
+      expect(
+        await (await ResponseErrorBuilder().createSafeResponse(
+          _MockRequestContext(),
+          (p0) => throw const ValidationCollectionException(
+            [
+              ValidationException('cool', 'Amazing'),
+              ValidationException('Incredible', 'Astounding'),
+            ],
+          ),
+          defaultResponse: loginFailResponse,
+        ))
+            .body(),
+        await validationCollectionExceptionResponse(
+          const ValidationCollectionException(
+            [
+              ValidationException('cool', 'Amazing'),
+              ValidationException('Incredible', 'Astounding'),
+            ],
+          ),
+        ).body(),
+      );
     });
   });
 }

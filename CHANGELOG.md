@@ -1,3 +1,7 @@
+## 0.1.4
+
+- Added Validation and ValidationCollectionException default handling to ResponseErrorBuilder
+
 ## 0.1.3
 
 - Added optional logAllErrors for ResponseErrorBuilder to enable logging of all thrown errors

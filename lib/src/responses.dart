@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dart_frog/dart_frog.dart';
+import 'package:event_db/event_db.dart';
 
 /// The default 404 response of Dart_Frog. Used to hide an actual handling by
 /// the server.
@@ -40,5 +43,20 @@ Response unexpectedErrorResponse([RequestContext? _]) {
   return Response(
     statusCode: 500,
     body: 'Internal Server Error',
+  );
+}
+
+/// The response for [ValidationException]s that are raised.
+Response validationExceptionResponse(ValidationException exception) {
+  return Response(statusCode: 400, body: exception.message);
+}
+
+/// The response for [ValidationCollectionException]s that are raised.
+Response validationCollectionExceptionResponse(
+  ValidationCollectionException exception,
+) {
+  return Response(
+    statusCode: 400,
+    body: json.encode(exception.exceptions.map((e) => e.message).toList()),
   );
 }
