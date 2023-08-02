@@ -1,3 +1,7 @@
+## 0.1.5
+
+- Added SecretsOrigin and FileSecretsOrigin to con
+
 ## 0.1.4
 
 - Added Validation and ValidationCollectionException default handling to ResponseErrorBuilder
