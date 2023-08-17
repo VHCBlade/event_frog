@@ -4,10 +4,9 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:event_authentication/event_authenticator_db.dart';
 import 'package:event_db/event_db.dart';
 import 'package:event_frog/event_frog.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class _MockRequestContext extends Mock implements RequestContext {
+class _MockRequestContext extends TestRequestContext {
   @override
   final Request request = Request('POST', Uri.parse('https://example.com/a'));
 }
@@ -25,7 +24,7 @@ void main() {
         [
           provider<EventEnvironment>((context) => const EventEnvironment()),
           provider<ResponseErrorBuilder>((context) => ResponseErrorBuilder()),
-          EventMiddleware.safeResponse
+          EventMiddleware.safeResponse,
         ],
       );
 

@@ -1,6 +1,12 @@
+## 0.1.6
+
+- Updated to accept dart_frog ^0.3.0 as well as ^1.0.0
+- Added TestRequestContext to conveniently have an implementation of read and provide by Extension
+- Fixed tests
+
 ## 0.1.5
 
-- Added SecretsOrigin and FileSecretsOrigin to con
+- Added SecretsOrigin and FileSecretsOrigin to maintain and attain secrets
 
 ## 0.1.4
 

@@ -23,7 +23,7 @@ class _MockRequestContext extends Mock implements RequestContext {
     ),
     AuthenticationSecretsRepository:
         FileSecretsRepository(secretsFile: 'test.txt', random: Random(120)),
-    BaseJWT: BaseJWT()..dateIssued = DateTime(2010)
+    BaseJWT: BaseJWT()..dateIssued = DateTime(2010),
   };
   @override
   T read<T>() => _request[T] as T;
@@ -87,7 +87,7 @@ void bodyAsModelTest() {
         ExampleModel.new,
         BaseJWT.new,
         EmailLoginRequest.new,
-        JWTRole.new
+        JWTRole.new,
       ];
       for (final type in types) {
         try {

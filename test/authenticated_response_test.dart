@@ -4,10 +4,9 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:event_authentication/event_authenticator_db.dart';
 import 'package:event_db/event_db.dart';
 import 'package:event_frog/event_frog.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class _MockRequestContext extends Mock implements RequestContext {
+class _MockRequestContext extends TestRequestContext {
   @override
   final Request request = Request('POST', Uri.parse('https://example.com/a'));
 }
@@ -20,7 +19,7 @@ class RequestRequestContextDecorator implements RequestContext {
   final Request request;
 
   @override
-  RequestContext provide<T extends Object>(T Function() create) {
+  RequestContext provide<T extends Object?>(T Function() create) {
     requestContext = requestContext.provide<T>(create);
     return this;
   }

@@ -1,12 +1,6 @@
 import 'package:dart_frog/dart_frog.dart';
-import 'package:event_frog/src/provider.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:event_frog/event_frog.dart';
 import 'package:test/test.dart';
-
-class _MockRequestContext extends Mock implements RequestContext {
-  @override
-  final Request request = Request('POST', Uri.parse('https://example.com/a'));
-}
 
 void main() {
   group('EventFrogMiddlewareStack', () {
@@ -27,7 +21,8 @@ void main() {
           value += context.read<String>();
           return Response(body: value);
         });
-        final response = await handler(_MockRequestContext());
+
+        final response = await handler(TestRequestContext());
 
         expect(await response.body(), '7falseCool');
       });
