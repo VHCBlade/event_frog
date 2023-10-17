@@ -1,3 +1,7 @@
+## 0.1.7
+
+- Updated to accept mocktail ^0.3.0 as well as ^1.0.0
+
 ## 0.1.6
 
 - Updated to accept dart_frog ^0.3.0 as well as ^1.0.0
