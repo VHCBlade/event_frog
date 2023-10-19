@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:event_authentication/event_authentication.dart';
+import 'package:event_db/event_db.dart';
 import 'package:event_frog/event_frog.dart';
 
 /// Helps authenticate jwts and create them from logins

@@ -1,3 +1,7 @@
+## 0.1.10
+
+- Fixed Missing Import for BaseModelFieldExtension
+
 ## 0.1.9
 
 - Changed event_db and event_db_tester to accept the new 0.2.0 version as well.
