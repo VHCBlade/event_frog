@@ -1,3 +1,7 @@
+## 0.1.9
+
+- Changed event_db and event_db_tester to accept the new 0.2.0 version as well.
+
 ## 0.1.8
 
 - Added logStackTrace to ResponseErrorBuilder which can be set to true to log the stackTrace as well as the thrown exception itself.
