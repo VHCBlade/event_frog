@@ -1,3 +1,7 @@
+## 0.1.8
+
+- Added logStackTrace to ResponseErrorBuilder which can be set to true to log the stackTrace as well as the thrown exception itself.
+
 ## 0.1.7
 
 - Updated to accept mocktail ^0.3.0 as well as ^1.0.0

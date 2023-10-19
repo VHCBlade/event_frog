@@ -17,7 +17,11 @@ class ResponseErrorBuilder {
   ///
   /// If [logAllErrors] is true, all errors will be logged instead of just
   /// unexpected errors.
-  ResponseErrorBuilder({this.logger, this.logAllErrors = false});
+  ResponseErrorBuilder({
+    this.logger,
+    this.logAllErrors = false,
+    this.logStackTrace = false,
+  });
 
   /// This is used when something is thrown while running [createSafeResponse]
   ///
@@ -43,6 +47,10 @@ class ResponseErrorBuilder {
   /// If true, [logger] will be called on all errors/exceptions rather than just unexpected ones.
   bool logAllErrors;
 
+  /// If true, [logger] will be called on the stack traces as well as the
+  /// exception itself
+  bool logStackTrace;
+
   /// Allows the [builder] to create a response. If anything is thrown by
   /// builder, it will automatically catch it and create a new response.
   ///
@@ -61,9 +69,16 @@ class ResponseErrorBuilder {
   }) async {
     try {
       return await builder(context);
-    } on Object catch (e) {
-      if (logAllErrors) {
+    } on Object catch (e, stackTrace) {
+      void log() {
         logger?.call(e);
+        if (logStackTrace) {
+          logger?.call(stackTrace);
+        }
+      }
+
+      if (logAllErrors) {
+        log();
       }
       if (map.containsKey(e.runtimeType)) {
         return map[e.runtimeType]!(context, e);
@@ -78,7 +93,7 @@ class ResponseErrorBuilder {
         return defaultResponse(context);
       }
       if (!logAllErrors) {
-        logger?.call(e);
+        log();
       }
       return unexpectedErrorResponse();
     }

@@ -184,6 +184,43 @@ void main() {
       );
       expect(i, 3);
     });
+    test('Logger StackTrace', () async {
+      var i = 0;
+      await ResponseErrorBuilder(
+        logger: (event) => i++,
+        logAllErrors: false,
+        logStackTrace: true,
+      ).createSafeResponse(
+        _MockRequestContext(),
+        (p0) => throw ArgumentError(),
+      );
+      await ResponseErrorBuilder(
+        logger: (event) => i++,
+        logAllErrors: true,
+        logStackTrace: true,
+      ).createSafeResponse(
+        _MockRequestContext(),
+        (p0) => throw ArgumentError(),
+      );
+      expect(i, 4);
+      await ResponseErrorBuilder(
+        logger: (event) => i++,
+        logAllErrors: false,
+        logStackTrace: true,
+      ).createSafeResponse(
+        _MockRequestContext(),
+        (p0) => throw PermissionException(),
+      );
+      await ResponseErrorBuilder(
+        logger: (event) => i++,
+        logAllErrors: true,
+        logStackTrace: true,
+      ).createSafeResponse(
+        _MockRequestContext(),
+        (p0) => throw PermissionException(),
+      );
+      expect(i, 6);
+    });
     test('Validation Exception', () async {
       expect(
         await (await ResponseErrorBuilder().createSafeResponse(
