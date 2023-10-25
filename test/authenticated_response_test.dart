@@ -60,7 +60,7 @@ final providerStack = EventFrogMiddlewareStack(
     provider<EventEnvironment>((context) => const EventEnvironment()),
     provider<ResponseErrorBuilder>((context) => ResponseErrorBuilder()),
     provider<AuthenticatedResponseBuilder>(
-      (context) => AuthenticatedResponseBuilder(),
+      (context) => const AuthenticatedResponseBuilder(),
     ),
   ],
 );

@@ -89,7 +89,7 @@ void emailLoginTest() {
 
       try {
         final loginResult =
-            await AuthenticatedResponseBuilder().emailLogin(context);
+            await const AuthenticatedResponseBuilder().emailLogin(context);
         tester
           ..addTestValue(loginResult.statusCode)
           ..addTestValue(await loginResult.body());

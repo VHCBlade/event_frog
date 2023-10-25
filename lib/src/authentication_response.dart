@@ -7,6 +7,14 @@ import 'package:event_frog/event_frog.dart';
 
 /// Helps authenticate jwts and create them from logins
 class AuthenticatedResponseBuilder {
+  /// [hideMissingError] determines whether missing authorization failures will
+  /// hide the error message with a 404 or not.
+  const AuthenticatedResponseBuilder({this.hideMissingError = false});
+
+  /// [hideMissingError] determines whether missing authorization failures will
+  /// hide the error message with a 404 or not.
+  final bool hideMissingError;
+
   /// Performs an emailLogin for an [EmailLoginRequest] that is
   /// in the request inside [context]
   ///
@@ -64,7 +72,7 @@ class AuthenticatedResponseBuilder {
   }) async {
     final authorization = context.request.headers.authorization;
     if (authorization == null) {
-      throw PermissionException();
+      throw hideMissingError ? NotFoundException() : PermissionException();
     }
     final signer = context.read<JWTSigner>();
     final jwt = await signer.validateAndDecodeToken(authorization);

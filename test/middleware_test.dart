@@ -57,7 +57,7 @@ void main() {
           provider<EventEnvironment>((context) => const EventEnvironment()),
           provider<ResponseErrorBuilder>((context) => ResponseErrorBuilder()),
           provider<AuthenticatedResponseBuilder>(
-            (context) => AuthenticatedResponseBuilder(),
+            (context) => const AuthenticatedResponseBuilder(),
           ),
           EventMiddleware.safeResponse,
           EventMiddleware.authenticatedResponse,
@@ -96,7 +96,7 @@ void main() {
         provider<EventEnvironment>((context) => const EventEnvironment()),
         provider<ResponseErrorBuilder>((context) => ResponseErrorBuilder()),
         provider<AuthenticatedResponseBuilder>(
-          (context) => AuthenticatedResponseBuilder(),
+          (context) => const AuthenticatedResponseBuilder(),
         ),
         EventMiddleware.safeResponse,
       ];

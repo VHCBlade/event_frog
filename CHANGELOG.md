@@ -1,3 +1,8 @@
+## 0.1.11
+
+- Changed AuthenticatedResponseBuilder to have a constant constructor
+- Added hideMissingError field to AuthenticatedResponseBuilder to hide the 401 when authorization is missing with a 404
+
 ## 0.1.10
 
 - Fixed Missing Import for BaseModelFieldExtension
