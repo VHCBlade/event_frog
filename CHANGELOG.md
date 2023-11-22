@@ -1,3 +1,7 @@
+## 0.1.12
+
+- Added bodyAsModelList to ModelRequest
+
 ## 0.1.11
 
 - Changed AuthenticatedResponseBuilder to have a constant constructor

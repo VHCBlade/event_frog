@@ -32,6 +32,7 @@ class _MockRequestContext extends Mock implements RequestContext {
 void main() {
   group('ModelRequest', () {
     group('bodyAsModel', bodyAsModelTest);
+    group('bodyAsModelList', bodyAsModelListTest);
   });
   group('ResponseBuilderContext', () {
     test('ResponseErrorBuilder', () async {
@@ -101,5 +102,36 @@ void bodyAsModelTest() {
       }
     },
     testMap: requestTestCases,
+  ).runTests();
+}
+
+void bodyAsModelListTest() {
+  SerializableListTester<Request>(
+    testGroupName: 'ModelRequest',
+    mainTestName: 'bodyAsModelList',
+    mode: ListTesterMode.auto,
+    testFunction: (value, tester) async {
+      final types = [
+        ExampleModel.new,
+        BaseJWT.new,
+        EmailLoginRequest.new,
+        JWTRole.new,
+      ];
+      for (final type in types) {
+        try {
+          tester.addTestValue(
+            (await value.bodyAsModelList(type))
+                .map((e) => e.toJsonString())
+                .toList(),
+          );
+          // ignore: avoid_catching_errors
+        } on ArgumentError {
+          tester.addTestValue('Invalid!');
+        } on FormatException {
+          tester.addTestValue('Invalid!');
+        }
+      }
+    },
+    testMap: requestTestListCases,
   ).runTests();
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dart_frog/dart_frog.dart';
 import 'package:event_authentication/event_authentication.dart';
 import 'package:event_db/event_db.dart';
@@ -59,6 +61,52 @@ Map<String, Request Function()> get requestTestCases => {
                   ..noExpiry = true
                   ..password = 'example')
                 .toJsonString(),
+          ),
+      'Failed Model': () => Request.post(
+            Uri.parse('https://example.com/a'),
+            body: 'abcdefghijklmnopqrstuvwxyz',
+          ),
+    };
+
+Map<String, Request Function()> get requestTestListCases => {
+      'Example Model': () => Request.post(
+            Uri.parse('https://example.com/a'),
+            body: json.encode(
+              [
+                (ExampleModel()
+                      ..s = 'Amazing'
+                      ..i = 120)
+                    .toMap()
+              ],
+            ),
+          ),
+      'BaseJWT Model': () => Request.post(
+            Uri.parse('https://example.com/a'),
+            body: json.encode(
+              [
+                (BaseJWT()
+                      ..expiry = const Duration(days: 20)
+                      ..dateIssued = DateTime(2012)
+                      ..jwtRole = (JWTRole()
+                        ..roles = [
+                          'Great',
+                          'Cool',
+                        ]))
+                    .toMap()
+              ],
+            ),
+          ),
+      'EmailLoginRequest Model': () => Request.post(
+            Uri.parse('https://example.com/a'),
+            body: json.encode(
+              [
+                (EmailLoginRequest()
+                      ..email = 'email@example.com'
+                      ..noExpiry = true
+                      ..password = 'example')
+                    .toMap()
+              ],
+            ),
           ),
       'Failed Model': () => Request.post(
             Uri.parse('https://example.com/a'),

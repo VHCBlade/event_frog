@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dart_frog/dart_frog.dart';
 import 'package:event_authentication/event_authenticator_db.dart';
 import 'package:event_db/event_db.dart';
@@ -54,5 +56,28 @@ extension ModelRequest on Request {
   Future<T> bodyAsModel<T extends GenericModel>(T Function() supplier) async {
     final myBody = await body();
     return supplier()..loadFromJsonString(myBody);
+  }
+
+  /// Retrieves the [body] of this request as a List of [T].
+  /// Will throw a [TypeError] or [FormatException] if the [body] doesn't
+  /// conform to the format expected by [T]
+  Future<List<T>> bodyAsModelList<T extends GenericModel>(
+    T Function() supplier,
+  ) async {
+    final myBody = await body();
+    final rawList = json.decode(myBody);
+
+    if (rawList is! List<dynamic>) {
+      throw const FormatException('Response is not a list!');
+    }
+
+    return rawList
+        .map(
+          (e) => supplier()
+            ..loadFromMap(
+              (e as Map).map((key, value) => MapEntry('$key', value)),
+            ),
+        )
+        .toList();
   }
 }

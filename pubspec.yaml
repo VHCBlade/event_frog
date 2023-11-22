@@ -1,6 +1,6 @@
 name: event_frog
 description: A framework for making dart_frog web servers using event_db
-version: 0.1.11
+version: 0.1.12
 repository: https://github.com/VHCBlade/event_frog
 
 environment:
